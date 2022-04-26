@@ -1,0 +1,37 @@
+{
+  "name": "webdriveriotutorial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.8",
+    "@babel/register": "^7.16.9",
+    "@wdio/cli": "^7.16.13",
+    "@wdio/local-runner": "^7.16.13",
+    "@wdio/mocha-framework": "^7.16.13",
+    "@wdio/spec-reporter": "^7.16.13",
+    "chromedriver": "^97.0.4",
+    "wdio-chromedriver-service": "^7.2.8"
+  },
+  "dependencies": {
+    "find-chrome-version": "^2.2.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VamsiKrishna445/webdriveriotutorial.git"
+  },
+  "bugs": {
+    "url": "https://github.com/VamsiKrishna445/webdriveriotutorial/issues"
+  },
+  "homepage": "https://github.com/VamsiKrishna445/webdriveriotutorial#readme",
+  "description": ""
+}

@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1650445048895' stop='1650445064771'>
+    <name>should verify searchbutton and searchpage in CNN</name>
+    <title>should verify searchbutton and searchpage in CNN</title>
+    <test-cases>
+        <test-case start='1650445048895' status='passed' stop='1650445064771'>
+            <name>should  open the Search page and verify all options </name>
+            <title>should  open the Search page and verify all options </title>
+            <labels>
+                <label name='language' value='javascript'/>
+                <label name='framework' value='wdio'/>
+                <label name='thread' value='0-0'/>
+            </labels>
+            <parameters>
+                <parameter kind='argument' name='browser' value='chrome-100.0.4896.127'/>
+            </parameters>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
