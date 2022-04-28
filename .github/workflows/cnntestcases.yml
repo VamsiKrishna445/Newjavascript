@@ -1,0 +1,137 @@
+name: cnn testcases
+on:
+  push:
+    
+    
+    
+
+jobs:
+  metrcis-gathering:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - application: CNN.com
+            env: poc                        
+            property: cnn
+            project: cnn.com  
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: CNN-Plus
+            env: poc                        
+            property: cnn
+            project: cnn-plus
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: Stellar-2
+            env: poc                        
+            property: cnn
+            project: stellar-2
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: Digital-Magic-Wall
+            env: poc                        
+            property: cnn
+            project: digital-magic-wall
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: ncaa.com
+            env: poc                        
+            property: ncaa
+            project: ncaa.com
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: WB.com
+            env: poc                        
+            property: wb
+            project: wb.com
+            testrail-api: https://dramafever.testrail.com/index.php?/api/v2
+            testrail-user: WB_TESTRAIL_USER
+            testrail-key: WB_TESTRAIL_KEY
+          - application: cartoonnetwork.com
+            env: poc                        
+            property: cartoonnetwork
+            project: cartoonnetwork.com
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: TNT.com
+            env: poc                        
+            property: TNT
+            project: TNT.com
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY 
+          - application: AS
+            env: poc                        
+            property: AS
+            project: AS
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: ODT.com
+            env: poc                        
+            property: ODT.com
+            project: ODT.com
+            testrail-api: https://turnerqa.testrail.com/index.php?/api/v2
+            testrail-user: TESTRAIL_USER
+            testrail-key: TESTRAIL_KEY
+          - application: DCUI
+            env: poc                        
+            property: DCUI
+            project: DCUI
+            testrail-api: https://dramafever.testrail.com/index.php?/api/v2
+            testrail-user: DRAMA_TESTRAIL_USER
+            testrail-key: DRAMA_TESTRAIL_KEY  
+          - application: wizardingworld
+            env: poc                        
+            property: wizardingworld
+            project: wizardingworld
+            testrail-api: https://dramafever.testrail.com/index.php?/api/v2
+            testrail-user: DRAMA_TESTRAIL_USER
+            testrail-key: DRAMA_TESTRAIL_KEY                      
+
+    services:      
+      dogstatsd:        
+        image: datadog/agent:latest
+        env:
+          DD_LOG_LEVEL: DEBUG
+          DD_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DD_DOGSTATSD_TAGS: "env:${{ matrix.env }} application:${{ matrix.application }} property:${{ matrix.property }} service:tcoe-metrics-farm version:0"
+          DD_DOGSTATSD_NON_LOCAL_TRAFFIC: true
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - /proc/:/host/proc/:ro
+          - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro        
+
+    container:
+      image: node:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Test
+        run: yarn metrics
+        continue-on-error: true
+        env:
+          APPLICATION: ${{ matrix.application }}
+          DD_AGENT_HOST: dogstatsd
+          DD_METRIC_PREFIX: tcoe.metrics.testcases
+          TESTRAIL_API:  ${{ matrix.testrail-api }}
+          TESTRAIL_USER: ${{ secrets[matrix.testrail-user] }}
+          TESTRAIL_KEY: ${{ secrets[matrix.testrail-key] }}
+          PROJECT: ${{ matrix.project }}
+
+      - name: give dogstatsd some time to publish metrics
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '30s'
